@@ -3,6 +3,7 @@ import json
 import time
 import asyncio
 from playwright.async_api import async_playwright
+from flask import Flask
 
 # === CONFIGURATION ===
 GRAPHQL_URL = "https://qy64m4juabaffl7tjakii4gdoa.appsync-api.eu-west-1.amazonaws.com/graphql"
@@ -10,10 +11,16 @@ JOB_PAGE_URL = "https://www.jobsatamazon.co.uk/app#/jobSearch?query=Warehouse%20
 
 # Telegram bot credentials
 TELEGRAM_BOT_TOKEN = "8214392800:AAGrRksRKpAD8Oa8H4aByo5XKSwc_9SM9Bo"
-CHAT_IDS = ["7943617436", "-1002622997910"]  # Send to both
+CHAT_IDS = ["7943617436"]  # Send to both
 
 # Track jobs already sent
 seen_jobs = set()
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return 'Hello World!'
 
 
 # === TELEGRAM ALERT ===
@@ -129,4 +136,7 @@ async def main_loop():
 
 
 if __name__ == "__main__":
+    import os
+    port = int(os.environ.get('PORT', 4000))
+    app.run(host='0.0.0.0', port=port)
     asyncio.run(main_loop())
